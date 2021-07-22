@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FBF08A31-D16D-40AB-8C07-381BA8DBE9A5}</ProjectGuid>
+    <ProjectGuid>{4E422A31-3A12-4331-8D00-F9A2B9BA3A9F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cheshire.Plugins.ProfanityFilter</RootNamespace>
-    <AssemblyName>Cheshire.Plugins.ProfanityFilter</AssemblyName>
+    <RootNamespace>Cheshire.Plugins.Utilities</RootNamespace>
+    <AssemblyName>Cheshire.Plugins.Utilities</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -93,27 +92,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\PluginSettings.cs" />
-    <Compile Include="Networking\Hooks\ChatMsgPacketPreHook.cs" />
-    <Compile Include="PluginEntry.cs" />
-    <Compile Include="Manifest.cs" />
-    <Compile Include="ProfanityFilter.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Cheshire.Plugins.Utilities\Cheshire.Plugins.Utilities.csproj">
-      <Project>{4e422a31-3a12-4331-8d00-f9a2b9ba3a9f}</Project>
-      <Name>Cheshire.Plugins.Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="Test" BeforeTargets="PrepareForBuild">
-    <Message Importance="High" Text="@(CopiedBinaries)" />
-  </Target>
   <Import Project="..\packages\AscensionGameDev.Intersect.Server.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Server.Framework.targets" Condition="Exists('..\packages\AscensionGameDev.Intersect.Server.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Server.Framework.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

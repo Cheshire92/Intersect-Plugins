@@ -1,8 +1,8 @@
 ﻿using System;
 
+using Cheshire.Plugins.Utilities.Logging;
 using Cheshire.Plugins.ProfanityFilter.Configuration;
 using Cheshire.Plugins.ProfanityFilter.Networking.Hooks;
-using Cheshire.Plugins.ProfanityFilter.Utilities;
 
 using Intersect.Plugins;
 using Intersect.Server.Plugins;
@@ -37,17 +37,22 @@ namespace Cheshire.Plugins.ProfanityFilter
             }
             Logger.Write(context, LogLevel.Info, "Done!");
 
-            // Generate our filter regular expressions.
-            Logger.Write(context, LogLevel.Info, $@"Generating ProfanityFilter Expressions..");
-            ProfanityFilter.CreateFilters(context.GetTypedConfiguration<PluginSettings>()?.ProfanityFilters);
-            Logger.Write(context, LogLevel.Info, "Done!");
+            
 
         }
         
         /// <inheritdoc/>
         public override void OnStart(IServerPluginContext context)
         {
+            // Write to our console and log files to notify the user we are doing something.
+            Logger.Write(context, LogLevel.Info, "*=====================================*");
+            Logger.Write(context, LogLevel.Info, "*       Profanity Filter Plugin       *");
+            Logger.Write(context, LogLevel.Info, "*=====================================*");
 
+            // Generate our filter regular expressions.
+            Logger.Write(context, LogLevel.Info, $@"Generating ProfanityFilter Expressions..");
+            ProfanityFilter.CreateFilters(context.GetTypedConfiguration<PluginSettings>()?.ProfanityFilters);
+            Logger.Write(context, LogLevel.Info, "Done!");
         }
         
         /// <inheritdoc/>
