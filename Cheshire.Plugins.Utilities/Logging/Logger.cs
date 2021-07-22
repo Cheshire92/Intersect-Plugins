@@ -27,8 +27,7 @@ namespace Cheshire.Plugins.Utilities.Logging
                 case LogLevel.Warning:
                     context.Logging.Plugin.Warn(message);
                     break;
-            }
-            
+            }         
         }
 
         public static void Write(IServerPluginContext context, LogLevel level, string message, bool writeToConsole = true)
@@ -52,7 +51,6 @@ namespace Cheshire.Plugins.Utilities.Logging
                     context.Logging.Plugin.Warn(message);
                     break;
             }
-
         }
     }
 

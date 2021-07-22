@@ -36,9 +36,6 @@ namespace Cheshire.Plugins.ProfanityFilter
                 Environment.Exit(-4);
             }
             Logger.Write(context, LogLevel.Info, "Done!");
-
-            
-
         }
         
         /// <inheritdoc/>
