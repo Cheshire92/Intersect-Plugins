@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\PluginSettings.cs" />
+    <Compile Include="Networking\Hooks\CreateCharacterPacketPreHook.cs" />
     <Compile Include="Networking\Hooks\ChatMsgPacketPreHook.cs" />
     <Compile Include="PluginEntry.cs" />
     <Compile Include="Manifest.cs" />

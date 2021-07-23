@@ -1,15 +1,18 @@
 ﻿using System;
 
 using Intersect.Plugins;
-using Intersect.Server.Plugins;
 
 namespace Cheshire.Plugins.Utilities.Logging
 {
     public static class Logger
     {
-        public static void Write(IPluginBootstrapContext context, LogLevel level, string message, bool writeToConsole = true)
+        public static IPluginBaseContext Context { get; set; }
+
+        public static bool WriteToConsole { get; set; }
+
+        public static void Write(LogLevel level, string message)
         {
-            if (writeToConsole)
+            if (WriteToConsole)
             {
                 Console.WriteLine(message);
             }
@@ -17,40 +20,17 @@ namespace Cheshire.Plugins.Utilities.Logging
             switch (level)
             {
                 case LogLevel.Error:
-                    context.Logging.Plugin.Error(message);
+                    Context.Logging.Plugin.Error(message);
                     break;
 
                 case LogLevel.Info:
-                    context.Logging.Plugin.Info(message);
+                    Context.Logging.Plugin.Info(message);
                     break;
 
                 case LogLevel.Warning:
-                    context.Logging.Plugin.Warn(message);
+                    Context.Logging.Plugin.Warn(message);
                     break;
             }         
-        }
-
-        public static void Write(IServerPluginContext context, LogLevel level, string message, bool writeToConsole = true)
-        {
-            if (writeToConsole)
-            {
-                Console.WriteLine(message);
-            }
-
-            switch (level)
-            {
-                case LogLevel.Error:
-                    context.Logging.Plugin.Error(message);
-                    break;
-
-                case LogLevel.Info:
-                    context.Logging.Plugin.Info(message);
-                    break;
-
-                case LogLevel.Warning:
-                    context.Logging.Plugin.Warn(message);
-                    break;
-            }
         }
     }
 

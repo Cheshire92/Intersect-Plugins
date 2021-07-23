@@ -23,7 +23,7 @@ namespace Cheshire.Plugins.ProfanityFilter
         public string Key => typeof(Manifest).Namespace;
 
         /// <inheritdoc />
-        public SemVersion Version => new SemVersion(1);
+        public SemVersion Version => new SemVersion(1, 1);
 
         /// <inheritdoc />
         public Authors Authors =>
