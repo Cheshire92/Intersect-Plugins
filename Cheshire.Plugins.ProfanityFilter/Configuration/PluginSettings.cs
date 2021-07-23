@@ -69,6 +69,11 @@ namespace Cheshire.Plugins.ProfanityFilter.Configuration
         /// Determines whether Character Names are filtered by this plugin.
         /// </summary>
         public bool FilterCharacterNames { get; set; } = true;
+
+        /// <summary>
+        /// Determines the character used to censor bad words with.
+        /// </summary>
+        public char CensorCharacter { get; set; } = '*';
     }
 
 }

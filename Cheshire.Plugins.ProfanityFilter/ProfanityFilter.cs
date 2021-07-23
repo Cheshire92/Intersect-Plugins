@@ -9,6 +9,8 @@ namespace Cheshire.Plugins.ProfanityFilter
     {
         private static List<string> mFilters;
 
+        public static char FilterCharacter = '*';
+
         /// <summary>
         /// Creates the internal Regex filters used to filter naughty words.
         /// </summary>
@@ -66,7 +68,7 @@ namespace Cheshire.Plugins.ProfanityFilter
     #region Private Methods
     // Credit goes to https://github.com/jamesmontemagno for these two methods.
     // His Censorship class was an inspiration to this, but felt like it could be handled a little more efficiently for Intersect.
-    static string StarCensoredMatch(Group m) => new string('*', m.Captures[0].Value.Length);
+    static string StarCensoredMatch(Group m) => new string(FilterCharacter, m.Captures[0].Value.Length);
 
          static string ToRegexPattern(string wildcardSearch)
          {

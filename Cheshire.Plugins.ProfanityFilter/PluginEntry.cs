@@ -64,6 +64,7 @@ namespace Cheshire.Plugins.ProfanityFilter
 
             // Generate our filter regular expressions.
             Logger.Write(LogLevel.Info, $@"Generating ProfanityFilter Expressions..");
+            ProfanityFilter.FilterCharacter = PluginSettings.Settings.Config.CensorCharacter;
             ProfanityFilter.CreateFilters(PluginSettings.Settings.ProfanityFilters);
 
             Logger.Write(LogLevel.Info, "Done!");
