@@ -55,8 +55,8 @@ namespace Cheshire.Plugins.Client.WebButtons.Configuration
         /// <summary>
         /// The alignment of the button upon creation.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Alignments Alignment { get; set; }
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public List<Alignments> Alignments { get; set; } = new List<Alignments>();
 
         /// <summary>
         /// Set the image for the button.
@@ -77,6 +77,12 @@ namespace Cheshire.Plugins.Client.WebButtons.Configuration
         /// Set the sound that plays when the button is hovered over.
         /// </summary>
         public string HoverSound { get; set; }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            Alignments = new List<Alignments>(Alignments.Distinct());
+        }
     }
 
 }

@@ -156,7 +156,11 @@ namespace Cheshire.Plugins.Client.WebButtons
                     // Create our new button, set its values!
                     var button = new Button(parentControl, control.Name);
                     button.SetBounds(control.Bounds);
-                    button.AddAlignment(control.Alignment);
+                    foreach (var alignment in control.Alignments)
+                    {
+                        button.AddAlignment(alignment);
+                    }
+                    button.ProcessAlignments();
 
                     // Set the images if they exists.
                     if (control.Image != null && control.Image.Length > 0 && Assets.ContainsKey(control.Image))
