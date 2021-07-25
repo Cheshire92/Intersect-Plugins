@@ -150,7 +150,7 @@ namespace Cheshire.Plugins.Client.WebButtons
             {
                 Logger.Write(LogLevel.Error, $"Attempting to generate {control.Name} on {control.ParentControl}..");
                 // Get the parent control that we want to create our button onn.
-                var parentControl = activeInterface.FindControlOnInterface(control.ParentControl);
+                var parentControl = activeInterface.Children.FindByName(control.ParentControl);
                 if (parentControl != null)
                 {
                     // Create our new button, set its values!
