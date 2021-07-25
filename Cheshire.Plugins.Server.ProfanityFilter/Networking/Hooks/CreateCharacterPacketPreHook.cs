@@ -1,11 +1,11 @@
-﻿using Cheshire.Plugins.ProfanityFilter.Configuration;
+﻿using Cheshire.Plugins.Server.ProfanityFilter.Configuration;
 using Cheshire.Plugins.Utilities.Logging;
 
 using Intersect.Network;
 using Intersect.Network.Packets.Client;
 using Intersect.Network.Packets.Server;
 
-namespace Cheshire.Plugins.ProfanityFilter.Networking.Hooks
+namespace Cheshire.Plugins.Server.ProfanityFilter.Networking.Hooks
 {
     public class CreateCharacterPacketPreHook : IPacketHandler<CreateCharacterPacket>
     {

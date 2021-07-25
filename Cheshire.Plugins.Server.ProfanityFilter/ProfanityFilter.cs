@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Cheshire.Plugins.ProfanityFilter
+namespace Cheshire.Plugins.Server.ProfanityFilter
 {
     public static class ProfanityFilter
     {

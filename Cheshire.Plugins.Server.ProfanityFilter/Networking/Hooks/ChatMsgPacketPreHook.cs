@@ -1,7 +1,7 @@
 ﻿using Intersect.Network;
 using Intersect.Network.Packets.Client;
 
-namespace Cheshire.Plugins.ProfanityFilter.Networking.Hooks
+namespace Cheshire.Plugins.Server.ProfanityFilter.Networking.Hooks
 {
     public class ChatMsgPacketPreHook : IPacketHandler<ChatMsgPacket>
     {

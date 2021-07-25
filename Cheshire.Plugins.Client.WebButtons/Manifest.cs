@@ -7,7 +7,7 @@ using Semver;
 using System;
 using System.Collections.Generic;
 
-namespace Cheshire.Plugins.ProfanityFilter
+namespace Cheshire.Plugins.Client.WebButtons
 {
     /// <summary>
     /// Defines a plugin manifest in code rather than an embedded manifest.json file.
@@ -23,7 +23,7 @@ namespace Cheshire.Plugins.ProfanityFilter
         public string Key => typeof(Manifest).Namespace;
 
         /// <inheritdoc />
-        public SemVersion Version => new SemVersion(1, 1, 1);
+        public SemVersion Version => new SemVersion(1, 0, 0);
 
         /// <inheritdoc />
         public Authors Authors =>

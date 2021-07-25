@@ -6,7 +6,7 @@ using Intersect.Plugins;
 
 using Newtonsoft.Json;
 
-namespace Cheshire.Plugins.ProfanityFilter.Configuration
+namespace Cheshire.Plugins.Server.ProfanityFilter.Configuration
 {
     /// <summary>
     /// Our base plugin configuration class.

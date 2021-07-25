@@ -1,14 +1,14 @@
 ﻿using System;
 
 using Cheshire.Plugins.Utilities.Logging;
-using Cheshire.Plugins.ProfanityFilter.Configuration;
-using Cheshire.Plugins.ProfanityFilter.Networking.Hooks;
+using Cheshire.Plugins.Server.ProfanityFilter.Configuration;
+using Cheshire.Plugins.Server.ProfanityFilter.Networking.Hooks;
 
 using Intersect.Plugins;
 using Intersect.Server.Plugins;
 using Intersect.Network.Packets.Client;
 
-namespace Cheshire.Plugins.ProfanityFilter
+namespace Cheshire.Plugins.Server.ProfanityFilter
 {
     public class PluginEntry : ServerPluginEntry
     {
