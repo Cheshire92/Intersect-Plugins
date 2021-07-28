@@ -327,7 +327,7 @@ namespace Cheshire.Plugins.Client.Minimap
                     }
                     else
                     {
-                        switch ((EntityTypes)entity.Value.Type)
+                        switch (entity.Value.Type)
                         {
                             case EntityTypes.Player:
                                 color = PluginSettings.Settings.Colors.Player;
