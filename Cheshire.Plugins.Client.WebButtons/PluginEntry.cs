@@ -24,7 +24,7 @@ namespace Cheshire.Plugins.Client.WebButtons
     {
         public string AssetPath { get; set; }
 
-        public Dictionary<string, GameTexture> Assets = new Dictionary<string, GameTexture>();
+        public Dictionary<string, GameTexture> Images = new Dictionary<string, GameTexture>();
 
         /// <inheritdoc />
         public override void OnBootstrap([ValidatedNotNull] IPluginBootstrapContext context)
@@ -74,13 +74,13 @@ namespace Cheshire.Plugins.Client.WebButtons
             // Go through each button in our configuration and load the assets!
             foreach (var button in PluginSettings.Settings.Buttons)
             {
-                if (button.Image != null && button.Image.Length > 0 && !Assets.ContainsKey(button.Image))
+                if (button.Image != null && button.Image.Length > 0 && !Images.ContainsKey(button.Image))
                 {
                     Logger.Write(LogLevel.Info, $"Loading asset {button.Image}");
                     var asset = context.ContentManager.Load<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.Interface, Path.Combine(AssetPath, button.Image));
                     if (asset != null)
                     {
-                        Assets.Add(button.Image, asset);
+                        Images.Add(button.Image, asset);
                     }
                     else
                     {
@@ -88,13 +88,13 @@ namespace Cheshire.Plugins.Client.WebButtons
                     }
                 }
             
-                if (button.HoverImage != null && button.HoverImage.Length > 0 && !Assets.ContainsKey(button.HoverImage))
+                if (button.HoverImage != null && button.HoverImage.Length > 0 && !Images.ContainsKey(button.HoverImage))
                 {
                     Logger.Write(LogLevel.Info, $"Loading asset {button.HoverImage}");
                     var asset = context.ContentManager.Load<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.Interface, Path.Combine(AssetPath, button.HoverImage));
                     if (asset != null)
                     {
-                        Assets.Add(button.HoverImage, asset);
+                        Images.Add(button.HoverImage, asset);
                     }
                     else
                     {
@@ -102,13 +102,13 @@ namespace Cheshire.Plugins.Client.WebButtons
                     }
                 }
             
-                if (button.ClickedImage != null && button.ClickedImage.Length > 0 && !Assets.ContainsKey(button.ClickedImage))
+                if (button.ClickedImage != null && button.ClickedImage.Length > 0 && !Images.ContainsKey(button.ClickedImage))
                 {
                     Logger.Write(LogLevel.Info, $"Loading asset {button.ClickedImage}");
                     var asset = context.ContentManager.Load<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.Interface, Path.Combine(AssetPath, button.ClickedImage));
                     if (asset != null)
                     {
-                        Assets.Add(button.ClickedImage, asset);
+                        Images.Add(button.ClickedImage, asset);
                     }
                     else
                     {
@@ -156,6 +156,7 @@ namespace Cheshire.Plugins.Client.WebButtons
                     // Create our new button, set its values!
                     var button = new Button(parentControl, control.Name);
                     button.SetBounds(control.Bounds);
+
                     foreach (var alignment in control.Alignments)
                     {
                         button.AddAlignment(alignment);
@@ -163,17 +164,17 @@ namespace Cheshire.Plugins.Client.WebButtons
                     button.ProcessAlignments();
 
                     // Set the images if they exists.
-                    if (control.Image != null && control.Image.Length > 0 && Assets.ContainsKey(control.Image))
+                    if (control.Image != null && control.Image.Length > 0 && Images.ContainsKey(control.Image))
                     {
-                        button.SetImage(Assets[control.Image], control.Image, Button.ControlState.Normal);
+                        button.SetImage(Images[control.Image], control.Image, Button.ControlState.Normal);
                     }
-                    if (control.HoverImage != null && control.HoverImage.Length > 0 && Assets.ContainsKey(control.HoverImage))
+                    if (control.HoverImage != null && control.HoverImage.Length > 0 && Images.ContainsKey(control.HoverImage))
                     {
-                        button.SetImage(Assets[control.HoverImage], control.HoverImage, Button.ControlState.Hovered);
+                        button.SetImage(Images[control.HoverImage], control.HoverImage, Button.ControlState.Hovered);
                     }
-                    if (control.ClickedImage != null && control.ClickedImage.Length > 0 && Assets.ContainsKey(control.ClickedImage))
+                    if (control.ClickedImage != null && control.ClickedImage.Length > 0 && Images.ContainsKey(control.ClickedImage))
                     {
-                        button.SetImage(Assets[control.ClickedImage], control.ClickedImage, Button.ControlState.Clicked);
+                        button.SetImage(Images[control.ClickedImage], control.ClickedImage, Button.ControlState.Clicked);
                     }
 
                     // Set the sounds if configured.

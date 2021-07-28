@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheshire.Plugins.Client.WebButtons", "Cheshire.Plugins.Client.WebButtons\Cheshire.Plugins.Client.WebButtons.csproj", "{4208A6E4-D72C-4E8C-88EE-61F939777062}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheshire.Plugins.Client.Minimap", "Cheshire.Plugins.Client.Minimap\Cheshire.Plugins.Client.Minimap.csproj", "{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,26 @@ Global
 		{4208A6E4-D72C-4E8C-88EE-61F939777062}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{4208A6E4-D72C-4E8C-88EE-61F939777062}.Tespia|x86.ActiveCfg = Debug|Any CPU
 		{4208A6E4-D72C-4E8C-88EE-61F939777062}.Tespia|x86.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Debug|x86.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Diagnostic|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Diagnostic|Any CPU.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Diagnostic|x86.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Diagnostic|x86.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.NoFody|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.NoFody|Any CPU.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.NoFody|x86.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.NoFody|x86.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Release|x86.Build.0 = Release|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Tespia|Any CPU.Build.0 = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Tespia|x86.ActiveCfg = Debug|Any CPU
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D}.Tespia|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +119,7 @@ Global
 		{FBF08A31-D16D-40AB-8C07-381BA8DBE9A5} = {1BC3A561-058A-4651-8605-F6BF97139C22}
 		{4E422A31-3A12-4331-8D00-F9A2B9BA3A9F} = {0BAE7974-93CB-4DB0-9FCC-B6C2A4F1E2C5}
 		{4208A6E4-D72C-4E8C-88EE-61F939777062} = {43FDD320-E5B3-4F48-A8E5-DF2011A00F09}
+		{BFFD1BD2-D2FA-4AFE-A367-BD4AD33F716D} = {43FDD320-E5B3-4F48-A8E5-DF2011A00F09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06095334-0BBD-4FDA-A230-272D08AFB221}
