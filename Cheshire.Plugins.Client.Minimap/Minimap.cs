@@ -2,10 +2,8 @@
 using Cheshire.Plugins.Utilities.Logging;
 using Intersect;
 using Intersect.Client.Framework.Entities;
-using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
-using Intersect.Client.Framework.Maps;
 using Intersect.Client.Plugins;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -16,8 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cheshire.Plugins.Client.Minimap
 {
@@ -27,7 +23,7 @@ namespace Cheshire.Plugins.Client.Minimap
 
         private Point mMinimapTileSize;
 
-        private string mResourceDir;
+        private string mPluginDir;
 
         private GameRenderTexture mRenderTexture;
 
@@ -51,21 +47,27 @@ namespace Cheshire.Plugins.Client.Minimap
 
         private GameRenderTexture mWhiteTexture;
 
-        public Minimap(IClientPluginContext context, int tileSizeX, int tileSizeY, string resourceDir)
+        public Minimap(IClientPluginContext context, int tileSizeX, int tileSizeY, string pluginDir)
         {
             mContext = context;
             mMinimapTileSize = new Point(tileSizeX, tileSizeY);
-            mResourceDir = resourceDir;
+            mPluginDir = pluginDir;
         }
 
         public void Initialize()
         {
-            GenerateControls();
-            LoadControlLayout(Path.Combine(mResourceDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
+            // Load our graphical assets into the engine!
+            LoadAssets(Path.Combine(Path.Combine(mPluginDir, "resources")));
 
+            // Generate our GUI controls and load their layout.
+            GenerateControls();
+            LoadControlLayout(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
+
+            // Generate some textures that we'll be using for rendering..
             mWhiteTexture = mContext.Graphics.GetWhiteTexture() as GameRenderTexture;
             mRenderTexture = GenerateBaseRenderTexture();
 
+            // Set our minimap background texture.
             mMinimap.Texture = mRenderTexture;
             mMinimap.SetTextureRect(0, 0, mRenderTexture.Width, mRenderTexture.Height);
         }
@@ -112,7 +114,10 @@ namespace Cheshire.Plugins.Client.Minimap
 
         public void Draw()
         {
+            // Clear the minimap texture so we can draw on it again.
             mRenderTexture.Clear(Color.Transparent);
+
+            // Render our minimap again!
             foreach (var pos in mMapGrid.Keys)
             {
                 // Do we need to actually redraw our maps?
@@ -130,6 +135,7 @@ namespace Cheshire.Plugins.Client.Minimap
                 DrawMinimapCacheToTexture(pos);
             }
 
+            // Toggle some switches off so we don't redraw caches literally every frame.
             if (mRedrawMaps)
             {
                 mRedrawMaps = false;
@@ -168,7 +174,7 @@ namespace Cheshire.Plugins.Client.Minimap
                             if (curTile.TilesetId != Guid.Empty)
                             {
                                 var tileset = TilesetBase.Get(curTile.TilesetId);
-                                var texture = mContext.ContentManager.GetTexture(Intersect.Client.Framework.Content.TextureType.Tileset, tileset.Name);
+                                var texture = mContext.ContentManager.Find<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.TileSet, tileset.Name);
 
                                 if (texture != null)
                                 {
@@ -236,6 +242,7 @@ namespace Cheshire.Plugins.Client.Minimap
             var x = 0;
             var y = 0;
 
+            // * Internal Screaming *
             switch(position)
             {
                 case MapPosition.TopLeft:
@@ -396,18 +403,29 @@ namespace Cheshire.Plugins.Client.Minimap
             return mContext.Graphics.CreateRenderTexture(sizeX, sizeY);
         }
 
+        private void LoadAssets(string resourceDir)
+        {
+            // Load GUI graphics
+            foreach (var file in Directory.EnumerateFiles(Path.Combine(resourceDir, "gui")))
+            {
+                mContext.ContentManager.Load<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.Gui, file, Path.GetFileName(file).ToLower());
+            }
+        }
+
         private void GenerateControls()
         {
-            //var x = new WindowControl()
+            // Generate our window control and do not allow users to resize it.
             mWindowControl = mContext.Lifecycle.Interface.Create<WindowControl>(string.Empty, false, mContext.Assembly.FullName);
             mWindowControl.DisableResizing();
 
+            // Create our imagepanel and its overlay for the minimap.
             mMinimap = new ImagePanel(mWindowControl, "MinimapContainer");
             var overlay = new ImagePanel(mWindowControl, "MinimapOverlay");
         }
 
         private void LoadControlLayout(string file, bool saveOutput = true)
         {
+            // Copied the implementation of LoadJsonUi because for some reason this doesn't seem to work from a plugin as it stands?
             try
             {
                 var obj = JsonConvert.DeserializeObject<JObject>(
