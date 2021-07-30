@@ -11,12 +11,12 @@ using Cheshire.Plugins.Client.WebButtons.Configuration;
 using System.IO;
 using Intersect.Client.Framework.Graphics;
 
-namespace Cheshire.Plugins.Client.WebButtons
+namespace Cheshire.Plugins.Client.Minimap
 {
     
     public class PluginEntry : ClientPluginEntry
     {
-        private Minimap.Minimap mMinimap;
+        private Minimap mMinimap;
 
         private bool mInitialized = false;
 
@@ -46,7 +46,7 @@ namespace Cheshire.Plugins.Client.WebButtons
         {
             // Load our assets, we'll need them later.
             Logger.Write(LogLevel.Info, "Loading Minimap..");
-            mMinimap = new Minimap.Minimap(context, PluginSettings.Settings.MinimapTileSize.X, PluginSettings.Settings.MinimapTileSize.X, Path.GetDirectoryName(context.Assembly.Location));
+            mMinimap = new Minimap(context, PluginSettings.Settings.MinimapTileSize.X, PluginSettings.Settings.MinimapTileSize.X, Path.GetDirectoryName(context.Assembly.Location));
             Logger.Write(LogLevel.Info, "Done!");
 
             context.Lifecycle.LifecycleChangeState += HandleLifecycleChangeState;
