@@ -9,6 +9,7 @@ using Intersect.Client.Plugins.Interfaces;
 using Cheshire.Plugins.Utilities.Logging;
 using Cheshire.Plugins.Client.WebButtons.Configuration;
 using System.IO;
+using Intersect.Client.Framework.Graphics;
 
 namespace Cheshire.Plugins.Client.WebButtons
 {

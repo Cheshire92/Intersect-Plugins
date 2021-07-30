@@ -1,19 +1,20 @@
-﻿using Cheshire.Plugins.Client.WebButtons.Configuration;
-using Cheshire.Plugins.Utilities.Logging;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
+using Cheshire.Plugins.Utilities.Client.Interface;
+using Cheshire.Plugins.Client.WebButtons.Configuration;
+
 using Intersect;
+using Intersect.Enums;
+using Intersect.GameObjects;
+using Intersect.Client.Plugins;
+using Intersect.GameObjects.Maps;
 using Intersect.Client.Framework.Entities;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
-using Intersect.Client.Plugins;
-using Intersect.Enums;
-using Intersect.GameObjects;
-using Intersect.GameObjects.Maps;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+
 
 namespace Cheshire.Plugins.Client.Minimap
 {
@@ -61,7 +62,7 @@ namespace Cheshire.Plugins.Client.Minimap
 
             // Generate our GUI controls and load their layout.
             GenerateControls();
-            LoadControlLayout(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
+            mMinimap.LoadJsonUI(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
 
             // Generate some textures that we'll be using for rendering..
             mWhiteTexture = mContext.Graphics.GetWhiteTexture() as GameRenderTexture;
@@ -72,7 +73,7 @@ namespace Cheshire.Plugins.Client.Minimap
             mMinimap.SetTextureRect(0, 0, mRenderTexture.Width, mRenderTexture.Height);
         }
 
-        public void Update(IEntity entity, Dictionary<Guid, IEntity> allEntities)
+        public void Update(IEntity entity, IReadOnlyDictionary<Guid, IEntity> allEntities)
         {
             if (entity == null || entity.MapInstance == null)
             {
@@ -315,7 +316,7 @@ namespace Cheshire.Plugins.Client.Minimap
             return grid;
         }
 
-        private Dictionary<MapPosition, Dictionary<Point, Color>> GenerateEntityInfo(Dictionary<Guid, IEntity> entities, IEntity myEntity)
+        private Dictionary<MapPosition, Dictionary<Point, Color>> GenerateEntityInfo(IReadOnlyDictionary<Guid, IEntity> entities, IEntity myEntity)
         {
             var dict = new Dictionary<MapPosition, Dictionary<Point, Color>>();
             foreach(var entity in entities)
@@ -421,44 +422,6 @@ namespace Cheshire.Plugins.Client.Minimap
             // Create our imagepanel and its overlay for the minimap.
             mMinimap = new ImagePanel(mWindowControl, "MinimapContainer");
             var overlay = new ImagePanel(mWindowControl, "MinimapOverlay");
-        }
-
-        private void LoadControlLayout(string file, bool saveOutput = true)
-        {
-            // Copied the implementation of LoadJsonUi because for some reason this doesn't seem to work from a plugin as it stands?
-            try
-            {
-                var obj = JsonConvert.DeserializeObject<JObject>(
-                    File.ReadAllText(file)
-                );
-
-                if (obj != null)
-                {
-                    mWindowControl.LoadJson(obj);
-                    mWindowControl.ProcessAlignments();
-                }
-
-                if (obj == null)
-                {
-                    saveOutput = false;
-                }
-
-            }
-            catch (Exception exception)
-            {
-                //Log JSON UI Loading Error
-                Logger.Write(LogLevel.Error, exception.Message);
-            }
-
-            if (saveOutput)
-            {
-                SaveControlLayout(file);
-            }
-        }
-
-        private void SaveControlLayout(string file)
-        {
-            File.WriteAllText(file, mWindowControl.GetJsonUI());
         }
 
         private enum MapPosition

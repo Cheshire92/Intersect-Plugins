@@ -39,8 +39,11 @@
     <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
     </Reference>
+    <Reference Include="Intersect Client Framework, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\lib\net461\Intersect Client Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Intersect Core, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AscensionGameDev.Intersect.Server.Framework.0.7.0.127-beta\lib\net461\Intersect Core.dll</HintPath>
+      <HintPath>..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\lib\net461\Intersect Core.dll</HintPath>
     </Reference>
     <Reference Include="Intersect.Server.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AscensionGameDev.Intersect.Server.Framework.0.7.0.127-beta\lib\net461\Intersect.Server.Framework.dll</HintPath>
@@ -92,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\Interface\BaseExtensions.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -106,5 +110,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\AscensionGameDev.Intersect.Server.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Server.Framework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AscensionGameDev.Intersect.Server.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Server.Framework.targets'))" />
+    <Error Condition="!Exists('..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Client.Framework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Client.Framework.targets'))" />
   </Target>
+  <Import Project="..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Client.Framework.targets" Condition="Exists('..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\build\AscensionGameDev.Intersect.Client.Framework.targets')" />
 </Project>
