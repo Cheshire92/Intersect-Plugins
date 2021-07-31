@@ -7,7 +7,7 @@ using Semver;
 using System;
 using System.Collections.Generic;
 
-namespace Cheshire.Plugins.Client.WebButtons
+namespace Cheshire.Plugins.Client.Minimap
 {
     /// <summary>
     /// Defines a plugin manifest in code rather than an embedded manifest.json file.
