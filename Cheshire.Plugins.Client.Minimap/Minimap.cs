@@ -62,7 +62,7 @@ namespace Cheshire.Plugins.Client.Minimap
 
             // Generate our GUI controls and load their layout.
             GenerateControls();
-            mMinimap.LoadJsonUI(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
+            mWindowControl.LoadJsonUI(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
 
             // Generate some textures that we'll be using for rendering..
             mWhiteTexture = mContext.Graphics.GetWhiteTexture() as GameRenderTexture;
