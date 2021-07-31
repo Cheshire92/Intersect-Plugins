@@ -40,7 +40,8 @@
       <HintPath>..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="Intersect Client Framework, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\lib\net461\Intersect Client Framework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Intersect-Engine\build\debug\clientextras\Intersect Client Framework.dll</HintPath>
     </Reference>
     <Reference Include="Intersect Core, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AscensionGameDev.Intersect.Client.Framework.0.7.0.127-beta\lib\net461\Intersect Core.dll</HintPath>
@@ -95,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\ContentManager\IContentManagerExtensions.cs" />
     <Compile Include="Client\Interface\BaseExtensions.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,7 +14,8 @@ using Intersect.GameObjects.Maps;
 using Intersect.Client.Framework.Entities;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
-
+using Cheshire.Plugins.Utilities.Client.ContentManager;
+using Intersect.Client.Framework.Content;
 
 namespace Cheshire.Plugins.Client.Minimap
 {
@@ -58,7 +59,7 @@ namespace Cheshire.Plugins.Client.Minimap
         public void Initialize()
         {
             // Load our graphical assets into the engine!
-            LoadAssets(Path.Combine(Path.Combine(mPluginDir, "resources")));
+            mContext.ContentManager.LoadAssets(Path.Combine(mPluginDir, "resources"), new List<ContentTypes>() { ContentTypes.Gui });
 
             // Generate our GUI controls and load their layout.
             GenerateControls();
@@ -402,15 +403,6 @@ namespace Cheshire.Plugins.Client.Minimap
             var sizeY = mMinimapTileSize.Y * mContext.Options.MapOpts.Height;
 
             return mContext.Graphics.CreateRenderTexture(sizeX, sizeY);
-        }
-
-        private void LoadAssets(string resourceDir)
-        {
-            // Load GUI graphics
-            foreach (var file in Directory.EnumerateFiles(Path.Combine(resourceDir, "gui")))
-            {
-                mContext.ContentManager.Load<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.Gui, file, Path.GetFileName(file).ToLower());
-            }
         }
 
         private void GenerateControls()
