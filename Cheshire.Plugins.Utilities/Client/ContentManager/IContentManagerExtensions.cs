@@ -1,10 +1,10 @@
-﻿using Intersect.Client.Framework.Audio;
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+
+using Intersect.Client.Framework.Audio;
 using Intersect.Client.Framework.Content;
 using Intersect.Client.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using static System.Net.WebRequestMethods;
 
 namespace Cheshire.Plugins.Utilities.Client.ContentManager
 {

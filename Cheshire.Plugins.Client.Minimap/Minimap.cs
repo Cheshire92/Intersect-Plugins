@@ -59,7 +59,7 @@ namespace Cheshire.Plugins.Client.Minimap
         public void Initialize()
         {
             // Load our graphical assets into the engine!
-            mContext.ContentManager.LoadAssets(Path.Combine(mPluginDir, "resources"), new List<ContentTypes>() { ContentTypes.Gui });
+            mContext.ContentManager.LoadAssets(Path.Combine(mPluginDir, "resources"), new List<ContentTypes>() { ContentTypes.Interface });
 
             // Generate our GUI controls and load their layout.
             GenerateControls();
