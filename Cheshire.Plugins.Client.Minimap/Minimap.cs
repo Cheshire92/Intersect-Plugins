@@ -324,8 +324,13 @@ namespace Cheshire.Plugins.Client.Minimap
             {
                 if (mMapPosition.ContainsKey(entity.Value.MapInstance.Id))
                 {
+                    // if entity is hidden for whatever reason, don't display!
+                    if (entity.Value.IsHidden)
+                    {
+                        continue;
+                    }
+
                     var map = mMapPosition[entity.Value.MapInstance.Id];
-                    bool ignore = false;
                     var color = Color.Transparent;
 
                     // Get a render colour for this entity.. Force our own to be different!
@@ -355,19 +360,12 @@ namespace Cheshire.Plugins.Client.Minimap
                                 break;
 
                             case EntityTypes.Projectile:
-                                ignore = true;
-                                break;
+                                continue;
 
                             default:
                                 color = PluginSettings.Settings.Colors.Default;
                                 break;
                         }
-                    }
-                    
-                    // Do we ignore this one? (ie projectiles)
-                    if (ignore)
-                    {
-                        continue;
                     }
 
                     // Add this to our location dictionary!
