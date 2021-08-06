@@ -23,7 +23,7 @@ namespace Cheshire.Plugins.Client.Minimap
         public string Key => typeof(Manifest).Namespace;
 
         /// <inheritdoc />
-        public SemVersion Version => new SemVersion(1, 0, 0);
+        public SemVersion Version => new SemVersion(1, 0, 2);
 
         /// <inheritdoc />
         public Authors Authors =>

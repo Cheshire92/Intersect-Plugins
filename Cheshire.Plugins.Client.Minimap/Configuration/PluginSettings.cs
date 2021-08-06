@@ -1,8 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 using Intersect.Plugins;
 
 using Intersect;
+
 
 namespace Cheshire.Plugins.Client.WebButtons.Configuration
 {
@@ -22,6 +24,11 @@ namespace Cheshire.Plugins.Client.WebButtons.Configuration
         /// Configures the colours used within the minimap.
         /// </summary>
         public Colors Colors = new Colors();
+
+        /// <summary>
+        /// Configures which map layers the minimap will render.
+        /// </summary>
+        public List<string> RenderLayers = new List<string>();
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)

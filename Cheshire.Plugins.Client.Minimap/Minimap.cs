@@ -166,17 +166,27 @@ namespace Cheshire.Plugins.Client.Minimap
             // Do we have an actual map to generate a minimap for? If not, leave it at a blank texture.
             if (mMapGrid[position] != null)
             {
-                foreach (var layer in mContext.Options.MapOpts.Layers.LowerLayers)
+                foreach (var layer in mContext.Options.MapOpts.Layers.All)
                 {
+                    // If this layer is not configured to render, skip it!
+                    if (!PluginSettings.Settings.RenderLayers.Contains(layer))
+                    {
+                        continue;
+                    }
+
+                    // Go through each x and y coordinate on the map to attempt to render this layer's tiles.
                     for (var x = 0; x < mContext.Options.MapOpts.Width; x++)
                     {
                         for (var y = 0; y < mContext.Options.MapOpts.Height; y++)
                         {
+                            // Is there a valid tileset to render on this map?
                             var curTile = mMapGrid[position].Layers[layer][x, y];
                             if (curTile.TilesetId != Guid.Empty)
                             {
+                                // Attempt to load the tileset and texture for it, if they exist actually draw the CENTER pixel of the tile to the screen for color approximation!
+                                // This method used to get the color of a pixel on the tile, but this was significantly slower than simply grabbing the pixel itself and drawing that.
                                 var tileset = TilesetBase.Get(curTile.TilesetId);
-                                var texture = mContext.ContentManager.Find<GameTexture>(Intersect.Client.Framework.Content.ContentTypes.TileSet, tileset.Name);
+                                var texture = mContext.ContentManager.Find<GameTexture>(ContentTypes.TileSet, tileset.Name);
 
                                 if (texture != null)
                                 {
