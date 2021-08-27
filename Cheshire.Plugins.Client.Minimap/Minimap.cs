@@ -66,7 +66,7 @@ namespace Cheshire.Plugins.Client.Minimap
             mWindowControl.LoadJsonUI(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
 
             // Generate some textures that we'll be using for rendering..
-            mWhiteTexture = mContext.Graphics.GetWhiteTexture() as GameRenderTexture;
+            mWhiteTexture = mContext.Graphics.CreateWhiteTexture();
             mRenderTexture = GenerateBaseRenderTexture();
 
             // Set our minimap background texture.
@@ -74,7 +74,7 @@ namespace Cheshire.Plugins.Client.Minimap
             mMinimap.SetTextureRect(0, 0, mRenderTexture.Width, mRenderTexture.Height);
         }
 
-        public void Update(IEntity entity, IReadOnlyDictionary<Guid, IEntity> allEntities)
+        public void Update(IPlayer entity, IReadOnlyDictionary<Guid, IEntity> allEntities)
         {
             if (entity == null || entity.MapInstance == null)
             {
