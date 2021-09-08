@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Cheshire.Plugins.Utilities.Client.Interface;
-using Cheshire.Plugins.Client.WebButtons.Configuration;
 
 using Intersect;
 using Intersect.Enums;
@@ -16,6 +15,7 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Cheshire.Plugins.Utilities.Client.ContentManager;
 using Intersect.Client.Framework.Content;
+using Cheshire.Plugins.Client.Minimap.Configuration;
 
 namespace Cheshire.Plugins.Client.Minimap
 {
@@ -31,7 +31,13 @@ namespace Cheshire.Plugins.Client.Minimap
 
         private ImagePanel mMinimap;
 
+        private ImagePanel mOverlay;
+
         private WindowControl mWindowControl;
+
+        private Button mZoomInButton;
+
+        private Button mZoomOutButton;
 
         private bool mRedrawMaps;
 
@@ -41,13 +47,15 @@ namespace Cheshire.Plugins.Client.Minimap
         
         private Dictionary<MapPosition, GameRenderTexture> mEntityCache = new Dictionary<MapPosition, GameRenderTexture>();
 
-        private Dictionary<MapPosition, Dictionary<Point, Color>> mEntityInfoCache = new Dictionary<MapPosition, Dictionary<Point, Color>>();
+        private Dictionary<MapPosition, Dictionary<Point, EntityInfo>> mEntityInfoCache = new Dictionary<MapPosition, Dictionary<Point, EntityInfo>>();
 
         private Dictionary<MapPosition, MapBase> mMapGrid = new Dictionary<MapPosition, MapBase>();
 
         private Dictionary<Guid, MapPosition> mMapPosition = new Dictionary<Guid, MapPosition>();
 
         private GameRenderTexture mWhiteTexture;
+
+        private byte mZoomLevel;
 
         public Minimap(IClientPluginContext context, int tileSizeX, int tileSizeY, string pluginDir)
         {
@@ -59,7 +67,7 @@ namespace Cheshire.Plugins.Client.Minimap
         public void Initialize()
         {
             // Load our graphical assets into the engine!
-            mContext.ContentManager.LoadAssets(Path.Combine(mPluginDir, "resources"), new List<ContentTypes>() { ContentTypes.Interface });
+            mContext.ContentManager.LoadAssets(Path.Combine(mPluginDir, "resources"), new List<ContentTypes>() { ContentTypes.Interface, ContentTypes.Miscellaneous });
 
             // Generate our GUI controls and load their layout.
             GenerateControls();
@@ -72,6 +80,8 @@ namespace Cheshire.Plugins.Client.Minimap
             // Set our minimap background texture.
             mMinimap.Texture = mRenderTexture;
             mMinimap.SetTextureRect(0, 0, mRenderTexture.Width, mRenderTexture.Height);
+
+            mZoomLevel = PluginSettings.Settings.DefaultZoom;
         }
 
         public void Update(IPlayer entity, IReadOnlyDictionary<Guid, IEntity> allEntities)
@@ -112,6 +122,34 @@ namespace Cheshire.Plugins.Client.Minimap
                 mRedrawEntities = true;
                 
             }
+
+            // Update our minimap display area
+            var centerX = (mRenderTexture.Width / 3) + (entity.X * PluginSettings.Settings.MinimapTileSize.X);
+            var centerY = (mRenderTexture.Height / 3) + (entity.Y * PluginSettings.Settings.MinimapTileSize.Y);
+            var displayWidth = (int)(mRenderTexture.Width * (mZoomLevel / 100f));
+            var displayHeight = (int)(mRenderTexture.Height * (mZoomLevel / 100f));
+
+            var x = centerX - (displayWidth / 2);
+            if (x + displayWidth > mRenderTexture.Width)
+            {
+                x = mRenderTexture.Width - displayWidth;
+            }
+            if (x < 0)
+            {
+                x = 0;
+            }
+
+            var y = centerY - (displayHeight / 2);
+            if (y + displayHeight > mRenderTexture.Height)
+            {
+                y = mRenderTexture.Height - displayHeight;
+            }
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            mMinimap.SetTextureRect(x, y, displayWidth, displayHeight);
         }
 
         public void Draw()
@@ -227,19 +265,33 @@ namespace Cheshire.Plugins.Client.Minimap
             {
                 foreach (var entity in mEntityInfoCache[position])
                 {
+                    var texture = mWhiteTexture as GameTexture;
+                    var color = entity.Value.Color;
+
+                    if (!string.IsNullOrWhiteSpace(entity.Value.Texture))
+                    {
+                        var found = mContext.ContentManager.Find<GameTexture>(ContentTypes.Miscellaneous, entity.Value.Texture);
+                        if (found != null)
+                        {
+                            texture = found;
+                            color = Color.White;
+                        }
+                    }
+
                     mContext.Graphics.DrawTexture(
-                        mWhiteTexture,
+                        texture,
                         0,
                         0,
-                        1,
-                        1,
+                        texture.Width,
+                        texture.Height,
                         entity.Key.X * mMinimapTileSize.X,
                         entity.Key.Y * mMinimapTileSize.Y,
                         mMinimapTileSize.X,
                         mMinimapTileSize.Y,
-                        entity.Value,
+                        color,
                         mEntityCache[position], GameBlendModes.Add);
                 }
+                    
                 
             }
         }
@@ -327,9 +379,9 @@ namespace Cheshire.Plugins.Client.Minimap
             return grid;
         }
 
-        private Dictionary<MapPosition, Dictionary<Point, Color>> GenerateEntityInfo(IReadOnlyDictionary<Guid, IEntity> entities, IEntity myEntity)
+        private Dictionary<MapPosition, Dictionary<Point, EntityInfo>> GenerateEntityInfo(IReadOnlyDictionary<Guid, IEntity> entities, IPlayer player)
         {
-            var dict = new Dictionary<MapPosition, Dictionary<Point, Color>>();
+            var dict = new Dictionary<MapPosition, Dictionary<Point, EntityInfo>>();
             foreach(var entity in entities)
             {
                 if (mMapPosition.ContainsKey(entity.Value.MapInstance.Id))
@@ -342,31 +394,45 @@ namespace Cheshire.Plugins.Client.Minimap
 
                     var map = mMapPosition[entity.Value.MapInstance.Id];
                     var color = Color.Transparent;
+                    var texture = string.Empty;
 
                     // Get a render colour for this entity.. Force our own to be different!
                     // Force our own to be a different colour!
-                    if (entity.Key == myEntity.Id)
+                    if (entity.Key == player.Id)
                     {
                         color = PluginSettings.Settings.Colors.MyEntity;
+                        texture = PluginSettings.Settings.Images.MyEntity;
                     }
                     else
                     {
                         switch (entity.Value.Type)
                         {
                             case EntityTypes.Player:
-                                color = PluginSettings.Settings.Colors.Player;
+                                if (player.IsInMyParty(entity.Key))
+                                {
+                                    color = PluginSettings.Settings.Colors.PartyMember;
+                                    texture = PluginSettings.Settings.Images.PartyMember;
+                                }
+                                else
+                                {
+                                    color = PluginSettings.Settings.Colors.Player;
+                                    texture = PluginSettings.Settings.Images.Player;
+                                }
                                 break;
 
                                 case EntityTypes.Event:
                                 color = PluginSettings.Settings.Colors.Event;
+                                texture = PluginSettings.Settings.Images.Event;
                                 break;
 
                             case EntityTypes.GlobalEntity:
                                 color = PluginSettings.Settings.Colors.Npc;
+                                texture = PluginSettings.Settings.Images.Npc;
                                 break;
 
                             case EntityTypes.Resource:
                                 color = PluginSettings.Settings.Colors.Resource;
+                                texture = PluginSettings.Settings.Images.Resource;
                                 break;
 
                             case EntityTypes.Projectile:
@@ -374,6 +440,7 @@ namespace Cheshire.Plugins.Client.Minimap
 
                             default:
                                 color = PluginSettings.Settings.Colors.Default;
+                                texture = PluginSettings.Settings.Images.Default;
                                 break;
                         }
                     }
@@ -381,7 +448,7 @@ namespace Cheshire.Plugins.Client.Minimap
                     // Add this to our location dictionary!
                     if (!dict.ContainsKey(map))
                     {
-                        dict.Add(map, new Dictionary<Point, Color>());
+                        dict.Add(map, new Dictionary<Point, EntityInfo>());
                     }
 
                     // If we already know an entity on this tile.. ignore this!
@@ -389,7 +456,7 @@ namespace Cheshire.Plugins.Client.Minimap
                     if (!dict[map].ContainsKey(location))
                     {
                         // If not, add our entity!
-                        dict[map].Add(location, color);
+                        dict[map].Add(location, new EntityInfo() { Color = color, Texture = texture });
                     }
                 }
             }
@@ -421,7 +488,28 @@ namespace Cheshire.Plugins.Client.Minimap
 
             // Create our imagepanel and its overlay for the minimap.
             mMinimap = new ImagePanel(mWindowControl, "MinimapContainer");
-            var overlay = new ImagePanel(mWindowControl, "MinimapOverlay");
+            mOverlay = new ImagePanel(mWindowControl, "MinimapOverlay");
+
+            mZoomInButton = new Button(mOverlay, "ZoomInButton");
+            mZoomInButton.Clicked += MZoomInButton_Clicked;
+            mZoomOutButton = new Button(mOverlay, "ZoomOutButton");
+            mZoomOutButton.Clicked += MZoomOutButton_Clicked;
+        }
+
+        private void MZoomOutButton_Clicked(Base sender, Intersect.Client.Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (mZoomLevel < PluginSettings.Settings.MaximumZoom)
+            {
+                mZoomLevel += PluginSettings.Settings.ZoomStep;
+            }
+        }
+
+        private void MZoomInButton_Clicked(Base sender, Intersect.Client.Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (mZoomLevel > PluginSettings.Settings.MinimumZoom)
+            {
+                mZoomLevel -= PluginSettings.Settings.ZoomStep;
+            }
         }
 
         private enum MapPosition
@@ -443,6 +531,13 @@ namespace Cheshire.Plugins.Client.Minimap
             BottomMiddle,
 
             BottomRight
+        }
+
+        private class EntityInfo
+        {
+            public Color Color { get; set; }
+
+            public string Texture { get; set; }
         }
 
     }

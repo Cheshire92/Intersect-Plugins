@@ -7,9 +7,10 @@ using Intersect.Client.Plugins;
 using Intersect.Client.Plugins.Interfaces;
 
 using Cheshire.Plugins.Utilities.Logging;
-using Cheshire.Plugins.Client.WebButtons.Configuration;
+
 using System.IO;
 using Intersect.Client.Framework.Graphics;
+using Cheshire.Plugins.Client.Minimap.Configuration;
 
 namespace Cheshire.Plugins.Client.Minimap
 {
