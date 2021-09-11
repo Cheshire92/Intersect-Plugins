@@ -91,7 +91,9 @@ namespace Cheshire.Plugins.Client.Minimap.Configuration
 
         public Color Event { get; set; } = Color.Blue;
 
-        public Color Resource { get; set; } = Color.ForestGreen;
+        public Dictionary<string, Color> Resource { get; set; } = new Dictionary<string, Color>() {
+            { "None", Color.White }
+        };
 
         public Color Default { get; set; } = Color.Magenta;
     }
@@ -108,7 +110,9 @@ namespace Cheshire.Plugins.Client.Minimap.Configuration
 
         public string Event { get; set; } = "minimap_event.png";
 
-        public string Resource { get; set; } = "minimap_resource.png";
+        public Dictionary<string, string> Resource { get; set; } = new Dictionary<string, string>() {
+            { "None", "minimap_resource_none.png" }
+        };
 
         public string Default { get; set; } = "minimap_npc.png";
     }

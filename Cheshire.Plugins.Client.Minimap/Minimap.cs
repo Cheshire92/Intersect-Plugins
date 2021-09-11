@@ -431,8 +431,52 @@ namespace Cheshire.Plugins.Client.Minimap
                                 break;
 
                             case EntityTypes.Resource:
-                                color = PluginSettings.Settings.Colors.Resource;
-                                texture = PluginSettings.Settings.Images.Resource;
+                                // Okay, this one is a little less straightforward since it relies on users configuring it PROPERLY.
+                                // Let's make sure they don't stupid it up and crash the plugin.
+
+                                // Get the tool type and assume we fail at setting our texture and color.
+                                var tool = (entity.Value as IResource).BaseResource.Tool;
+                                var texSet = false;
+                                var colSet = false;
+
+                                // Is the tool a valid one to get the string version for?
+                                if (tool >= 0 && tool < mContext.Options.EquipmentOpts.ToolTypes.Count)
+                                {
+                                    // Get the actual tool type from the server configuration.
+                                    var toolType = mContext.Options.EquipmentOpts.ToolTypes[tool];
+
+                                    // Attempt to get our color from the plugin configuration.
+                                    if (PluginSettings.Settings.Colors.Resource.TryGetValue(toolType, out color))
+                                    {
+                                        colSet = true;
+                                    }
+
+                                    // Attempt to get our texture from the plugin configuration.
+                                    if (PluginSettings.Settings.Images.Resource.TryGetValue(toolType, out texture))
+                                    {
+                                        texSet = true;
+                                    }
+                                }
+                                // Is it a None tool?
+                                else if (tool == -1)
+                                {
+                                    color = PluginSettings.Settings.Colors.Resource["None"];
+                                    colSet = true;
+                                    texture = PluginSettings.Settings.Images.Resource["None"];
+                                    texSet = true;
+                                }
+
+                                // Have we managed to set our color? If not, set to default.
+                                if (!colSet)
+                                { 
+                                    color = PluginSettings.Settings.Colors.Default;
+                                }
+
+                                // Have we managed to set our texture? If not, set to blank.
+                                if (!texSet)
+                                {
+                                    texture = string.Empty;
+                                }
                                 break;
 
                             case EntityTypes.Projectile:
