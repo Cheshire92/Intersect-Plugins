@@ -72,6 +72,7 @@ namespace Cheshire.Plugins.Client.Minimap
             // Generate our GUI controls and load their layout.
             GenerateControls();
             mWindowControl.LoadJsonUI(Path.Combine(mPluginDir, "resources", "gui", "layouts", "game", "MinimapLayout.json"));
+            mWindowControl.DisableResizing();
 
             // Generate some textures that we'll be using for rendering..
             mWhiteTexture = mContext.Graphics.CreateWhiteTexture();
@@ -528,7 +529,6 @@ namespace Cheshire.Plugins.Client.Minimap
         {
             // Generate our window control and do not allow users to resize it.
             mWindowControl = mContext.Lifecycle.Interface.Create<WindowControl>(string.Empty, false, mContext.Assembly.FullName);
-            mWindowControl.DisableResizing();
 
             // Create our imagepanel and its overlay for the minimap.
             mMinimap = new ImagePanel(mWindowControl, "MinimapContainer");
