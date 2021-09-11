@@ -47,7 +47,7 @@ namespace Cheshire.Plugins.Client.Minimap
         {
             // Load our assets, we'll need them later.
             Logger.Write(LogLevel.Info, "Loading Minimap..");
-            mMinimap = new Minimap(context, PluginSettings.Settings.MinimapTileSize.X, PluginSettings.Settings.MinimapTileSize.X, Path.GetDirectoryName(context.Assembly.Location));
+            mMinimap = new Minimap(context, PluginSettings.Settings.TileSize.X, PluginSettings.Settings.TileSize.X, Path.GetDirectoryName(context.Assembly.Location));
             Logger.Write(LogLevel.Info, "Done!");
 
             context.Lifecycle.LifecycleChangeState += HandleLifecycleChangeState;
@@ -79,7 +79,7 @@ namespace Cheshire.Plugins.Client.Minimap
                     mMinimap.Initialize();
                     mInitialized = true;
                 }
-                mMinimap.Update(gameUpdateArgs.Player, gameUpdateArgs.KnownEntities);
+                mMinimap.Update(gameUpdateArgs.Delta, gameUpdateArgs.Player, gameUpdateArgs.KnownEntities);
             }
             else
             {

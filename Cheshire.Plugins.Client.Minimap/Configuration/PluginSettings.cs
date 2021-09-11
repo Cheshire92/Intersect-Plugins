@@ -14,9 +14,14 @@ namespace Cheshire.Plugins.Client.Minimap.Configuration
         public static PluginSettings Settings { get; set; }
 
         /// <summary>
+        /// Configures the amount of time (in ms) between each entity position update.
+        /// </summary>
+        public long EntityUpdateTimer { get; set; } = 100;
+
+        /// <summary>
         /// Configures the size at which each minimap tile is rendered.
         /// </summary>
-        public Point MinimapTileSize { get; set; } = new Point(8, 8);
+        public Point TileSize { get; set; } = new Point(8, 8);
 
         /// <summary>
         /// Configures the minimum zoom level (0 - 100)

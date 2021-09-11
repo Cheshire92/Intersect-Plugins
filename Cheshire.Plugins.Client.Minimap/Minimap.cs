@@ -57,6 +57,10 @@ namespace Cheshire.Plugins.Client.Minimap
 
         private byte mZoomLevel;
 
+        private long mEntityUpdateTimer;
+
+        private long mGameUpdateTimer;
+
         public Minimap(IClientPluginContext context, int tileSizeX, int tileSizeY, string pluginDir)
         {
             mContext = context;
@@ -85,8 +89,10 @@ namespace Cheshire.Plugins.Client.Minimap
             mZoomLevel = PluginSettings.Settings.DefaultZoom;
         }
 
-        public void Update(IPlayer entity, IReadOnlyDictionary<Guid, IEntity> allEntities)
+        public void Update(TimeSpan delta, IPlayer entity, IReadOnlyDictionary<Guid, IEntity> allEntities)
         {
+            mGameUpdateTimer += delta.Milliseconds;
+
             if (entity == null || entity.MapInstance == null)
             {
                 return;
@@ -116,17 +122,16 @@ namespace Cheshire.Plugins.Client.Minimap
             }
 
             // check the same for entity locations!
-            var newLocations = GenerateEntityInfo(allEntities, entity);
-            if (newLocations != mEntityInfoCache)
+            if (mGameUpdateTimer > mEntityUpdateTimer)
             {
-                mEntityInfoCache = newLocations;
+                mEntityInfoCache = GenerateEntityInfo(allEntities, entity);
                 mRedrawEntities = true;
-                
+                mEntityUpdateTimer = mGameUpdateTimer += PluginSettings.Settings.EntityUpdateTimer;
             }
-
+            
             // Update our minimap display area
-            var centerX = (mRenderTexture.Width / 3) + (entity.X * PluginSettings.Settings.MinimapTileSize.X);
-            var centerY = (mRenderTexture.Height / 3) + (entity.Y * PluginSettings.Settings.MinimapTileSize.Y);
+            var centerX = (mRenderTexture.Width / 3) + (entity.X * PluginSettings.Settings.TileSize.X);
+            var centerY = (mRenderTexture.Height / 3) + (entity.Y * PluginSettings.Settings.TileSize.Y);
             var displayWidth = (int)(mRenderTexture.Width * (mZoomLevel / 100f));
             var displayHeight = (int)(mRenderTexture.Height * (mZoomLevel / 100f));
 
@@ -155,6 +160,12 @@ namespace Cheshire.Plugins.Client.Minimap
 
         public void Draw()
         {
+            // If we have nothing to update, just back out!
+            if (!mRedrawEntities && !mRedrawMaps)
+            {
+                return;
+            }
+
             // Clear the minimap texture so we can draw on it again.
             mRenderTexture.Clear(Color.Transparent);
 
