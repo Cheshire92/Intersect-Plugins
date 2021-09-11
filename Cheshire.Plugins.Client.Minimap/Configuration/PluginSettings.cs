@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 using Intersect;
@@ -61,6 +62,8 @@ namespace Cheshire.Plugins.Client.Minimap.Configuration
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
+            RenderLayers = new List<string>(RenderLayers.Distinct());
+
             Validate();
         }
 
