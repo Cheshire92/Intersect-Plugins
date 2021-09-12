@@ -16,6 +16,7 @@ using Intersect.Client.Framework.Gwen.Control;
 using Cheshire.Plugins.Utilities.Client.ContentManager;
 using Intersect.Client.Framework.Content;
 using Cheshire.Plugins.Client.Minimap.Configuration;
+using Intersect.Client.Framework.Maps;
 
 namespace Cheshire.Plugins.Client.Minimap
 {
@@ -99,8 +100,7 @@ namespace Cheshire.Plugins.Client.Minimap
             }
 
             // Generate a brand new map grid that we'll use to create our minimap!
-            var mapBase = MapBase.Get(entity.MapInstance.Id);
-            var newGrid = CreateMapGridFromMap(mapBase);
+            var newGrid = CreateMapGridFromMap(entity.MapInstance);
 
             // Have we changed maps at all? If so we'll have to start some things from scratch!
             if (!newGrid.SequenceEqual(mMapGrid))
@@ -373,21 +373,27 @@ namespace Cheshire.Plugins.Client.Minimap
             }
         }
 
-        private Dictionary<MapPosition, MapBase> CreateMapGridFromMap(MapBase map)
+        private Dictionary<MapPosition, MapBase> CreateMapGridFromMap(IMapInstance map)
         {
-            // Create and fill our grid with the easily accessible data.
             var grid = new Dictionary<MapPosition, MapBase>();
-            grid.Add(MapPosition.Middle, map);
-            grid.Add(MapPosition.TopMiddle, MapBase.Get(map.Up));
-            grid.Add(MapPosition.MiddleLeft, MapBase.Get(map.Left));
-            grid.Add(MapPosition.MiddleRight, MapBase.Get(map.Right));
-            grid.Add(MapPosition.BottomMiddle, MapBase.Get(map.Down));
+            for (var x = map.GridX - 1; x <= map.GridX + 1; x++)
+            {
+                for (var y = map.GridY - 1; y <= map.GridY + 1; y++)
+                {
+                    if (x >= 0 &&
+                        x < mContext.MapGrid.Width &&
+                        y >= 0 &&
+                        y < mContext.MapGrid.Height &&
+                        mContext.MapGrid.Content[x, y] != Guid.Empty)
+                    {
+                        int minimapX = x - (map.GridX - 1);
+                        int minimapY = y - (map.GridY - 1);
 
-            // Fill in the blanks that we need to figure out through other maps!
-            grid.Add(MapPosition.TopLeft, MapBase.Get(grid[MapPosition.TopMiddle]?.Left ?? grid[MapPosition.MiddleLeft]?.Up ?? Guid.Empty));
-            grid.Add(MapPosition.TopRight, MapBase.Get(grid[MapPosition.TopMiddle]?.Right ?? grid[MapPosition.MiddleRight]?.Up ?? Guid.Empty));
-            grid.Add(MapPosition.BottomLeft, MapBase.Get(grid[MapPosition.BottomMiddle]?.Left ?? grid[MapPosition.MiddleLeft]?.Down ?? Guid.Empty));
-            grid.Add(MapPosition.BottomRight, MapBase.Get(grid[MapPosition.BottomMiddle]?.Right ?? grid[MapPosition.MiddleRight]?.Down ?? Guid.Empty));
+                        grid.Add((MapPosition)(minimapX + (minimapY * 3)), MapBase.Get(mContext.MapGrid.Content[x, y]));
+                    }
+                }
+            }
+
             return grid;
         }
 
