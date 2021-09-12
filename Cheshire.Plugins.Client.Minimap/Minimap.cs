@@ -384,10 +384,10 @@ namespace Cheshire.Plugins.Client.Minimap
             grid.Add(MapPosition.BottomMiddle, MapBase.Get(map.Down));
 
             // Fill in the blanks that we need to figure out through other maps!
-            grid.Add(MapPosition.TopLeft, MapBase.Get(grid[MapPosition.TopMiddle]?.Left ?? Guid.Empty));
-            grid.Add(MapPosition.TopRight, MapBase.Get(grid[MapPosition.TopMiddle]?.Right ?? Guid.Empty));
-            grid.Add(MapPosition.BottomLeft, MapBase.Get(grid[MapPosition.BottomMiddle]?.Left ?? Guid.Empty));
-            grid.Add(MapPosition.BottomRight, MapBase.Get(grid[MapPosition.BottomMiddle]?.Right ?? Guid.Empty));
+            grid.Add(MapPosition.TopLeft, MapBase.Get(grid[MapPosition.TopMiddle]?.Left ?? grid[MapPosition.MiddleLeft]?.Up ?? Guid.Empty));
+            grid.Add(MapPosition.TopRight, MapBase.Get(grid[MapPosition.TopMiddle]?.Right ?? grid[MapPosition.MiddleRight]?.Up ?? Guid.Empty));
+            grid.Add(MapPosition.BottomLeft, MapBase.Get(grid[MapPosition.BottomMiddle]?.Left ?? grid[MapPosition.MiddleLeft]?.Down ?? Guid.Empty));
+            grid.Add(MapPosition.BottomRight, MapBase.Get(grid[MapPosition.BottomMiddle]?.Right ?? grid[MapPosition.MiddleRight]?.Down ?? Guid.Empty));
             return grid;
         }
 
